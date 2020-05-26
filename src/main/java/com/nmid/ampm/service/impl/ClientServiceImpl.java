@@ -1,7 +1,7 @@
 package com.nmid.ampm.service.impl;
 
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.nmid.ampm.config.PostTimes;
 import com.nmid.ampm.entity.Attachment;
 import com.nmid.ampm.exception.CommonException;
 import com.nmid.ampm.result.Result;
@@ -10,6 +10,7 @@ import com.nmid.ampm.service.ClientService;
 import com.nmid.ampm.service.IAttachmentService;
 import com.nmid.ampm.service.IPmzhaoxinService;
 import com.nmid.ampm.utils.ShortMessageUtil;
+import com.nmid.ampm.utils.Times;
 import com.nmid.ampm.utils.UploadUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -32,21 +33,34 @@ public class ClientServiceImpl implements ClientService {
     IPmzhaoxinService iPmzhaoxinService;
     @Autowired
     ShortMessageUtil shortMessageUtil;
+    @Autowired
+    PostTimes postTimes;
 
     private static String regx = "^.+-.+$";
     boolean exits = false;
     @Override
     public Result uploadsFile(MultipartFile multipartFile, String times) throws CommonException {
+        //判断times是否为当前times
+        String realTimes = postTimes.getTimes().get(Times.index);
+        if (!realTimes.equals(times)){
+            throw new CommonException(ResultCode.TIMESERROR);
+        }
         //1.判断文件是否为空
         if (multipartFile == null){
-            return new Result(ResultCode.FAIL);
+            throw  new CommonException(ResultCode.FAIL);
         }
         //2.判断是否符合命名规则。如：小明-第一次
         String fileName = multipartFile.getOriginalFilename();
         if (!Pattern.matches(regx,fileName)){
-            return new Result(ResultCode.FILENAMEERROR);
+            throw  new CommonException(ResultCode.FILENAMEERROR);
         }
         String name = fileName.substring(0,fileName.indexOf("-"));
+        //判断该培训生是否在列表当中
+        List<String> names = iPmzhaoxinService.getNames();
+        String str = names.toString();
+        if (!str.contains(name)){
+            throw new CommonException(ResultCode.NOTINPMERROR);
+        }
         Attachment attachment = new Attachment();
         //3.判断是否已经存在
         exits = iattachmentService.attachmentExits(name,times);

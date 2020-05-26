@@ -38,7 +38,7 @@ public class ShortMessageUtil {
     private String content;
 
     private static String tail = "此致\n\n    祝好\n\nPM";
-    private List<String> names = new LinkedList<>();
+    private List<String> names;
     private String nonames = "";
     public void sendMail(String[] to,String name,byte b,String times) {
         String content = "";
@@ -47,16 +47,13 @@ public class ShortMessageUtil {
         //b为0代表学生
         if (b == 0){
             attachmentByName = iAttachmentService.getAttachmentByName(name);
-            content = "你所上传的"+times+"附件如下：\n\n";
+            content = "你所上传的所有附件如下：\n\n";
         } else {
             attachmentByName = iAttachmentService.getAttachmentByTimes(times);
             //获得姓名
-            List<Pmzhaoxin> pmzhaoxins = iPmzhaoxinService.getBaseMapper().selectList(null);
-            pmzhaoxins.forEach(s->{
-                names.add(s.getName());
-            });
+            names = iPmzhaoxinService.getNames();
             //获得人数
-            int num = pmzhaoxins.size();
+            int num = names.size();
             nonames = names.toString();
             for (Attachment attachment : attachmentByName) {
                 if (nonames.contains(attachment.getName())){

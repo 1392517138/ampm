@@ -8,6 +8,9 @@ import com.nmid.ampm.mapper.PmzhaoxinMapper;
 import com.nmid.ampm.service.IPmzhaoxinService;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * <p>
  *  服务实现类
@@ -24,5 +27,15 @@ public class PmzhaoxinServiceImpl extends ServiceImpl<PmzhaoxinMapper, Pmzhaoxin
     public String getEmailByName(String name) {
         Pmzhaoxin one = getOne(Wrappers.<Pmzhaoxin>lambdaQuery().eq(Pmzhaoxin::getName, name));
         return one.getEmail();
+    }
+
+    @Override
+    public List<String> getNames() {
+        List<String> names = new ArrayList<>();
+        List<Pmzhaoxin> pmzhaoxins = this.getBaseMapper().selectList(null);
+        pmzhaoxins.forEach(s->{
+            names.add(s.getName());
+        });
+        return names;
     }
 }

@@ -15,7 +15,10 @@ public enum ResultCode {
     //---系统错误返回码-----
     FAIL(false, 10001, "操作失败"),
     FILENAMEERROR(false,20000,"文件名命名错误"),
+    TIMESERROR(false,25000,"第X次选择错误"),
     SUCCESSMODIFY(true, 30000, "成功修改！"),
+    NOTINPMERROR(false,40000,"该培训师不在培训列表"),
+    SIZEEXCEEDEDERROR(false,50000,"上传文件超过50Mb"),
     SERVER_ERROR(false, 99999, "抱歉，系统繁忙，请稍后重试！");
 
 
