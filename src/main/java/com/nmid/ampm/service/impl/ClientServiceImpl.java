@@ -18,6 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
@@ -37,6 +38,7 @@ public class ClientServiceImpl implements ClientService {
     PostTimes postTimes;
 
     private static String regx = "^.+-.+$";
+    String regx1 = "-(.*)\\.zip$";
     boolean exits = false;
     @Override
     public Result uploadsFile(MultipartFile multipartFile, String times) throws CommonException {
@@ -51,9 +53,18 @@ public class ClientServiceImpl implements ClientService {
         }
         //2.判断是否符合命名规则。如：小明-第一次
         String fileName = multipartFile.getOriginalFilename();
-        if (!Pattern.matches(regx,fileName)){
+        Pattern pattern = Pattern.compile(regx1);
+        Matcher matcher = pattern.matcher(fileName);
+        System.out.println(fileName+"-0------这是filename");
+        boolean b = matcher.find();
+        if ((!Pattern.matches(regx,fileName)) || (!fileName.endsWith(realTimes+".zip")) || !b){
             throw  new CommonException(ResultCode.FILENAMEERROR);
         }
+        String getTiems = matcher.group(1);
+        if (!getTiems.equals(realTimes)){
+            throw  new CommonException(ResultCode.FILENAMEERROR);
+        }
+
         String name = fileName.substring(0,fileName.indexOf("-"));
         //判断该培训生是否在列表当中
         List<String> names = iPmzhaoxinService.getNames();
@@ -69,6 +80,7 @@ public class ClientServiceImpl implements ClientService {
         attachment.setName(name);
         attachment.setFileName(fileName);
         attachment.setTimes(times);
+
         try {
             String url = UploadUtils.uploadImage(multipartFile,times);
             attachment.setFileUrl(url);
