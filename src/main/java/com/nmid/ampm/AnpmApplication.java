@@ -1,7 +1,10 @@
 package com.nmid.ampm;
 
+import com.nmid.ampm.config.PostTimes;
+import javafx.geometry.Pos;
 import org.apache.coyote.http11.AbstractHttp11Protocol;
 import org.mybatis.spring.annotation.MapperScan;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.embedded.tomcat.TomcatConnectorCustomizer;
@@ -25,7 +28,9 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 public class AnpmApplication {
     public static void main(String[] args) {
         SpringApplication.run(AnpmApplication.class, args);
+
     }
+
 
 //    @Bean
 //    public ServletWebServerFactory tomcatEmbedded() {

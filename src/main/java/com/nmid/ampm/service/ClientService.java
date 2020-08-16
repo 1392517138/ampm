@@ -17,8 +17,15 @@ public interface ClientService {
 
     /**
      * 上传文件
+     *
      * @param multipartFile
-     * @param times
      */
-    Result uploadsFile(MultipartFile multipartFile, String times) throws CommonException;
+    Result uploadsFile(MultipartFile multipartFile) throws CommonException;
+
+    /**
+     * 获取第几次
+     *
+     * @return
+     */
+    Result getTiems();
 }

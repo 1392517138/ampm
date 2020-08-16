@@ -19,8 +19,14 @@ public class ClientController {
     ClientService cilentService;
 
     @PostMapping("/uploadsFile")
-    public Result uploadsFile(MultipartFile multipartFile, @RequestParam("times") String times) throws CommonException {
-        return cilentService.uploadsFile(multipartFile,times);
+    public Result uploadsFile(MultipartFile multipartFile) throws CommonException {
+        return cilentService.uploadsFile(multipartFile);
     }
+
+    @PostMapping("/getTiems")
+    public Result getTiems() {
+        return cilentService.getTiems();
+    }
+
 
 }

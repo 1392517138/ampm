@@ -1,5 +1,6 @@
 package com.nmid.ampm;
 
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
@@ -10,9 +11,11 @@ import java.util.regex.Pattern;
 
 public class RegxTest {
     public static void main(String[] args) {
-        String regx = "^.+-.+$";
-        String string = "卢卡斯大家-离开";
-        boolean matches = Pattern.matches(regx, string);
-        System.out.println(matches);
+//        String regx = "^.+-.+$";
+//        String string = "卢卡斯大家-离开";
+//        boolean matches = Pattern.matches(regx, string);
+//        System.out.println(matches);
+
+
     }
 }
